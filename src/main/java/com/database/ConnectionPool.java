@@ -1,8 +1,11 @@
 package com.database;
 
 import org.apache.commons.dbcp.ConnectionFactory;
+import org.apache.commons.dbcp.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.KeyedObjectPoolFactory;
+import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.commons.pool.impl.StackKeyedObjectPoolFactory;
 import org.apache.logging.log4j.LogManager;
@@ -72,6 +75,15 @@ public class ConnectionPool
 
         KeyedObjectPoolFactory statementPool = poolConfig.getStatementPoolSize() > 0 ? new StackKeyedObjectPoolFactory(poolConfig.getStatementPoolSize()) : null;
 
+        new DebugEnabledConnectionFactory(
+                connectionFactory,
+                this.pool,
+                statementPool,
+                poolConfig.getValidationQuery(),
+                poolConfig.getValidationQueryTimeoutSecs(),
+                poolConfig.isReadOnly(),
+                poolConfig.isAutoCommit());
+
         this.pool.setMaxActive(poolConfig.getMaxSize());
         this.pool.setMinIdle(poolConfig.getMinSize());
         this.pool.setMaxIdle(poolConfig.getMaxIdle());
@@ -85,7 +97,6 @@ public class ConnectionPool
         this.pool.setTestOnBorrow(poolConfig.isTestOnBorrow());
         this.pool.setTestOnReturn(poolConfig.isTestOnReturn());
         this.pool.setTestWhileIdle(poolConfig.isTestWhileIdle());
-
         LOG.info("getPoolConfig(): initializing new connection pool {}", poolConfig);
 
         this.dataSource = new PoolingDataSource(this.pool);

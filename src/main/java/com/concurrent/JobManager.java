@@ -45,15 +45,16 @@ import com.google.common.util.concurrent.MoreExecutors;
 public class JobManager {
     private static final Logger LOG = LogManager.getLogger(JobManager.class);
 
-    //If batch timeout is defaulting to sum of individual jobs,
-    // how much buffer to add to that sum.
     private static final Long BATCH_TIMEOUT_SUM_BUFFER_MILLIS = 50L;
 
     public static final Long BATCH_TIMEOUT_UNDEFINED = -1L;
 
     public static final Integer DEFAULT_THREAD_POOL_SIZE = 20;
+
     public static final Long DEFAULT_TIMEOUT_MILLIS = 30000L;
+
     public static final Long DEFAULT_FOREGROUND_BATCH_MILLIS = BATCH_TIMEOUT_UNDEFINED;
+
     public static final Long DEFAULT_EVICTION_MILLIS = 5000L;
 
     public static final JobFacade DEFAULT_JOB_FACADE = new DoNothingJobFacadeImpl();
@@ -65,6 +66,7 @@ public class JobManager {
     private ScheduledThreadPoolExecutor evictionExecutorService;
 
     private final Queue<Job<?>> backgroundJobs = new ConcurrentLinkedQueue<>();
+
     private final Set<JobSubmissionResult> foregroundJobs = new HashSet<>();
 
     private String name;

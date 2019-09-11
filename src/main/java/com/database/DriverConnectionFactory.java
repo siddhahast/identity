@@ -42,7 +42,7 @@ public class DriverConnectionFactory implements ConnectionFactory, Configurable 
     public Connection createConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(poolConfig.getConnectionString(), getConnectionProperties());
 
-        LOG.debug("createConnection(): Creating jdbc connection {}", connection);
+        LOG.info("createConnection(): Creating jdbc connection {}", connection);
 
         return connection;
     }

@@ -30,6 +30,7 @@ public interface DbPoolConfigFactory {
 
         public static DbPoolConfigFactory getDbPoolConfigFactory()
         {
+            LOG.info("Starting the DbPoolConfig Factory to start the db service");
             try
             {
                 String factoryClassName = System.getProperty("dbconfig.factory", DbPropertiesConfigFactory.class.getName());

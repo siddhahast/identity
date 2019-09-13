@@ -18,6 +18,17 @@ public interface DbPoolConfigFactory {
     public static String DRIVER_CLASS_NAME = "driverClassName";
     public static String CONNECTION_FACTORY = "com.database.DriverConnectionFactory";
     public static String EXCEPTION_HANDLER = "com.database.SQLExceptionHandler";
+    public static String MIN_EVICTABLE_IDLE_TIME_MILLIS = "10000";
+    public static String QUERY_TIMEOUT_SECS = "10000";
+    public static String READ_ONLY = "false";
+    public static String SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS = "10000";
+    public static String STATEMENT_POOL_SIZE = "10";
+    public static String TEST_ON_BORROW = "false";
+    public static String TEST_ON_RETURN = "false";
+    public static String TEST_WHILE_IDLE = "false";
+
+    public static String TEST_PER_EVICTION_RUN = "2";
+
 
     public DbPoolConfig getDefaultPool();
     public DbPoolConfig getPool(String poolName);

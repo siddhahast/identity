@@ -58,4 +58,12 @@ public class UserServiceController
         User loggedInUser = userFacade.searchByUserToken(filter.getAuthToken());
         return new ResponseEntity<User>(loggedInUser, HttpStatus.OK);
     }
+
+    @RequestMapping(value="/user", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<User> createUser(@RequestBody User user)
+    {
+        User loggedInUser = userFacade.createUser(user);
+        return new ResponseEntity<User>(loggedInUser, HttpStatus.OK);
+    }
 }

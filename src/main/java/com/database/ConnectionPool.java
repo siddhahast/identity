@@ -75,21 +75,11 @@ public class ConnectionPool
 
         KeyedObjectPoolFactory statementPool = poolConfig.getStatementPoolSize() > 0 ? new StackKeyedObjectPoolFactory(poolConfig.getStatementPoolSize()) : null;
 
-        new DebugEnabledConnectionFactory(
-                connectionFactory,
-                this.pool,
-                statementPool,
-                poolConfig.getValidationQuery(),
-                poolConfig.getValidationQueryTimeoutSecs(),
-                poolConfig.isReadOnly(),
-                poolConfig.isAutoCommit());
-
         this.pool.setMaxActive(poolConfig.getMaxSize());
-        this.pool.setMinIdle(poolConfig.getMinSize());
         this.pool.setMaxIdle(poolConfig.getMaxIdle());
         this.pool.setMinIdle(poolConfig.getMinIdle());
         this.pool.setMaxWait(poolConfig.getMaxWaitMillis());
-        this.pool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_BLOCK);
+        this.pool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_GROW);
         this.pool.setMinEvictableIdleTimeMillis(poolConfig.getMinEvictableIdleTimeMillis());
         this.pool.setSoftMinEvictableIdleTimeMillis(poolConfig.getSoftMinEvictableIdleTimeMillis());
         this.pool.setTimeBetweenEvictionRunsMillis(poolConfig.getTimeBetweenEvictionRunsMillis());
@@ -98,6 +88,15 @@ public class ConnectionPool
         this.pool.setTestOnReturn(poolConfig.isTestOnReturn());
         this.pool.setTestWhileIdle(poolConfig.isTestWhileIdle());
         LOG.info("getPoolConfig(): initializing new connection pool {}", poolConfig);
+
+        new DebugEnabledConnectionFactory(
+                connectionFactory,
+                this.pool,
+                statementPool,
+                poolConfig.getValidationQuery(),
+                poolConfig.getValidationQueryTimeoutSecs(),
+                poolConfig.isReadOnly(),
+                poolConfig.isAutoCommit());
 
         this.dataSource = new PoolingDataSource(this.pool);
         this.dataSource.setAccessToUnderlyingConnectionAllowed(true);

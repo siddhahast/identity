@@ -26,13 +26,6 @@ public class UserFacadeImpl implements UserFacade
     {
         List<User> users = new ArrayList<>();
         User user1 = userDao.readUser(1L);
-//        user1.setFirstName("Siddhahast");
-//        user1.setEmail("siddhahast.mohapatra@gmail.com");
-//        user1.setLastName("Mohapatra");
-//        user1.setId(1L);
-//        users.add(user1);
-//
-
         users.add(user1);
         ObservableEventQueue.push(user1, UserEvent.TEST_EVENT);
         return users;
@@ -47,5 +40,12 @@ public class UserFacadeImpl implements UserFacade
     @Override
     public User searchByUserToken(String userToken) {
         return null;
+    }
+
+    @Override
+    public User createUser(User user) {
+        Long id =  userDao.create(user);
+        user.setId(id);
+        return user;
     }
 }

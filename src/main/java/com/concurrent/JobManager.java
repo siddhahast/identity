@@ -71,6 +71,10 @@ public class JobManager {
 
     private String name;
 
+    private Long timeElapse;
+
+    private Long endTime;
+
     private Integer threadPoolSize = DEFAULT_THREAD_POOL_SIZE;
     private Long timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     private long foregroundBatchTimeoutMillis = DEFAULT_FOREGROUND_BATCH_MILLIS;
@@ -142,7 +146,9 @@ public class JobManager {
             result = submitJobs(SubmitMode.FOREGROUND, batchTimeout, jobs);
             batchTimeout = result.getBatchTimeoutMillis();
             result.resolveWithTimeout();
-            LOG.debug("submitForeground() - finished {} jobs in {} ms", jobs.length, stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            timeElapse = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+            endTime = System.currentTimeMillis();
+            LOG.debug("submitForeground() - finished {} jobs in {} ms", jobs.length, timeElapse);
         }
         catch (CancellationException ex) {
             LOG.debug("submitForeground() - Canceling jobs after {} ms for exception:", stopwatch.elapsed(TimeUnit.MILLISECONDS), ex);
@@ -337,7 +343,7 @@ public class JobManager {
     {
         // lazy init
         if (this.executorService == null) {
-            this.delegateExecutorService = Executors.newFixedThreadPool(threadPoolSize, new DibsThreadFactory(name));
+            this.delegateExecutorService = Executors.newFixedThreadPool(threadPoolSize, new CustomThreadFactory(name));
             this.executorService = MoreExecutors.listeningDecorator(delegateExecutorService);
         }
 
@@ -363,6 +369,18 @@ public class JobManager {
         if (evictionExecutorService != null) {
             evictionExecutorService.shutdownNow();
         }
+    }
+
+    public Long getTimeElapse() {
+        return timeElapse;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 
     class Evictor implements Runnable {
@@ -459,13 +477,13 @@ public class JobManager {
 
     }
 
-    static class DibsThreadFactory implements ThreadFactory {
+    static class CustomThreadFactory implements ThreadFactory {
 
         private final String jobManagerName;
 
         private final AtomicInteger threadCounter;
 
-        public DibsThreadFactory(String jobManagerName)
+        public CustomThreadFactory(String jobManagerName)
         {
             this.jobManagerName = jobManagerName;
 
@@ -648,6 +666,5 @@ public class JobManager {
         {
             return this.getCollectiveFuture().get(batchTimeoutMillis, TimeUnit.MILLISECONDS);
         }
-
     }
 }

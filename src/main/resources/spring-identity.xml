@@ -20,10 +20,7 @@
     </mvc:interceptors>
 
     <bean id="threadLocalInterceptor" class="com.mvc.ThreadLocalInterceptor">
-        <property name="parser" ref="observerParser"/>
     </bean>
-
-    <bean id="observerParser" class="com.mvc.ObserverParser"></bean>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
@@ -35,15 +32,5 @@
 
     <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
     <bean id="HandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
-
-    <bean id="cacheRegistry" class="com.cache.CacheRegistryImpl">
-        <property name="configRegistry" ref="configRegistryMap"/>
-    </bean>
-
-    <util:map id="configRegistryMap" map-class="java.util.HashMap" key-type="java.lang.Class">
-        <entry key="com.cache.Cache" value-ref="cacheConfig"></entry>
-    </util:map>
-
-    <bean id="cacheConfig" class="com.cache.CacheConfig"></bean>
 
 </beans>

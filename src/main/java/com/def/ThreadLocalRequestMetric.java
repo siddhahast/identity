@@ -1,6 +1,5 @@
 package com.def;
 
-import com.observer.Observer;
 import com.util.ThreadLocalUtil;
 
 import java.util.List;

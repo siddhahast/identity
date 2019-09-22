@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ThreadLocalInterceptor implements HandlerInterceptor
 {
 
-    private Parser parser;
 
     private static final Logger LOG = Logger.getLogger(ThreadLocalInterceptor.class);
 
@@ -35,14 +34,7 @@ public class ThreadLocalInterceptor implements HandlerInterceptor
             throws Exception
     {
         LOG.info("After the request is processed by the controller");
-        parser.parse();
     }
 
-    public Parser getParser() {
-        return parser;
-    }
 
-    public void setParser(Parser parser) {
-        this.parser = parser;
-    }
 }

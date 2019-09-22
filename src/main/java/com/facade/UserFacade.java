@@ -16,4 +16,6 @@ public interface UserFacade
 
     public User searchByUserToken(String userToken);
 
+    public User createUser(User user);
+
 }
